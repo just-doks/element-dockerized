@@ -5,5 +5,9 @@
     "org.matrix.msc2965.authentication": {
         "issuer": "https://${DOMAIN}/",
         "account": "https://${MAS_FQDN}/account"
+    },
+    "io.element.e2ee": {
+        "default":false,
+        "force_disable":true
     }
 }

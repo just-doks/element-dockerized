@@ -179,7 +179,7 @@ services:
     container_name: matrix-element-admin
     restart: unless-stopped
     environment:
-      SERVER_NAME: $HOMESERVER_FQDN
+      SERVER_NAME: $DOMAIN
     networks:
       - matrix-network
     depends_on:

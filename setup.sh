@@ -24,42 +24,6 @@ if [[ ! -e .env  ]]; then
     read -p "Enter base domain name (e.g. example.com): " DOMAIN
     sed -ri.orig "s/example.com/$DOMAIN/" .env
 
-    # try to guess your livekit IP
-    if [ -x "$(command -v getent)" ]; then
-        NODE_IP=`getent hosts livekit.$DOMAIN | cut -d' ' -f1`
-        if ! [ -z "$NODE_IP" ]; then
-            sed -ri.orig "s/LIVEKIT_NODE_IP=127.0.0.1/LIVEKIT_NODE_IP=$NODE_IP/" .env
-        fi
-    fi
-
-    # SSL setup
-    read -p "Use local mkcert CA for SSL? [y/n] " use_mkcert
-    if [[ "$use_mkcert" =~ ^[Yy]$ ]]; then
-	if ! [ -x "$(command -v mkcert)" ]; then
-            echo "Please install mkcert from brew/apt/yum etc"
-	    exit
-        fi
-        mkcert -install
-        mkcert $DOMAIN '*.'$DOMAIN
-        mkdir -p data/ssl
-        mv ${DOMAIN}+1.pem data/ssl/fullchain.pem
-        mv ${DOMAIN}+1-key.pem data/ssl/privkey.pem
-        cp "$(mkcert -CAROOT)"/rootCA.pem data/ssl/ca-certificates.crt
-        # borrow letsencrypt's SSL config
-        curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > "data/ssl/options-ssl-nginx.conf"
-        curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "data/ssl/ssl-dhparams.pem"
-        success=true
-    else
-        read -p "Use letsencrypt for SSL? [y/n] " use_letsencrypt
-        if [[ "$use_letsencrypt" =~ ^[Yy]$ ]]; then
-	    mkdir -p data/ssl
-            touch data/ssl/ca-certificates.crt # will get overwritten by init-letsencrypt.sh
-            source ./init-letsencrypt.sh
-            success=true
-        else
-            echo "Please put a valid {privkey,fullchain}.pem and ca-certificates.crt into data/ssl/"
-        fi
-    fi
 else
     echo ".env already exists; move it out of the way first to re-setup"
 fi
