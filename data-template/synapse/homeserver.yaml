@@ -19,18 +19,13 @@ listeners:
     type: http
     x_forwarded: true
     resources:
-      - names: [client, federation]
+      - names: [client, openid]
         compress: false
-  - port: 9093
-    tls: false
-    type: http
-    resources:
-      - names: [replication]
 
 database:
     name: psycopg2
     args:
-        user: matrix
+        user: synapse_user
         password: '${SECRETS_POSTGRES_PASSWORD}'
         host: postgres
         database: synapse
@@ -43,7 +38,7 @@ macaroon_secret_key: '${SECRETS_SYNAPSE_MACAROON_SECRET_KEY}'
 form_secret: '${SECRETS_SYNAPSE_FORM_SECRET}'
 signing_key_path: "/run/secrets/synapse_signing_key"
 trusted_key_servers:
-  - server_name: "matrix.org"
+  - server_name: '${DOMAIN}'
 
 # please keep config above this point as close as possible to the original generated config
 # so that upstream generated config changes can be detected
@@ -51,48 +46,12 @@ trusted_key_servers:
 public_baseurl: https://${HOMESERVER_FQDN}/
 suppress_key_server_warning: true
 
-send_federation: false
-federation_sender_instances:
-  - synapse-federation-sender-1
-
-instance_map:
-  main:
-    host: 'synapse'
-    port: 9093
-
-redis:
-  enabled: true
-  host: redis
-  port: 6379
+#send_federation: false
 
 # as we want our first launch and subsequent upgrades to go as fast
 # as possible don't sleep between background updates
 background_updates:
     sleep_enabled: false
-
-email:
-  smtp_host: ${SMTP_HOST}
-  smtp_port: ${SMTP_PORT}
-  enable_tls: false
-  notif_from: "Your %(app)s homeserver <${MAIL_NOTIF_FROM_ADDRESS}>"
-  app_name: Matrix
-  enable_notifs: true
-  notif_for_new_users: false
-  client_base_url: https://${ELEMENT_WEB_FQDN}
-  validation_token_lifetime: 15m
-  invite_client_location: https://${ELEMENT_WEB_FQDN}
-  subjects:
-    message_from_person_in_room: "[%(app)s] You have a message on %(app)s from %(person)s in the %(room)s room..."
-    message_from_person: "[%(app)s] You have a message on %(app)s from %(person)s..."
-    messages_from_person: "[%(app)s] You have messages on %(app)s from %(person)s..."
-    messages_in_room: "[%(app)s] You have messages on %(app)s in the %(room)s room..."
-    messages_in_room_and_others: "[%(app)s] You have messages on %(app)s in the %(room)s room and others..."
-    messages_from_person_and_others: "[%(app)s] You have messages on %(app)s from %(person)s and others..."
-    invite_from_person_to_room: "[%(app)s] %(person)s has invited you to join the %(room)s room on %(app)s..."
-    invite_from_person: "[%(app)s] %(person)s has invited you to chat on %(app)s..."
-    password_reset: "[%(server_name)s] Password reset"
-    email_validation: "[%(server_name)s] Validate your email"
-
 
 # temporarily boost rate-limits to avoid breaking WIP MatrixRTC signalling
 rc_message:

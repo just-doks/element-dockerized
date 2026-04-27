@@ -1,4 +1,4 @@
-${CONFIG_HEADER}
+#${CONFIG_HEADER}
 
 http:
   listeners:
@@ -10,6 +10,7 @@ http:
     - name: compat
     - name: graphql
     - name: assets
+    - name: adminapi
     binds:
     - address: '[::]:8080'
     proxy_protocol: false
@@ -39,13 +40,6 @@ database:
   connect_timeout: 30
   idle_timeout: 600
   max_lifetime: 1800
-email:
-  from: '${MAS_EMAIL_FROM}'
-  reply_to: '${MAS_EMAIL_REPLY_TO}'
-  transport: smtp
-  mode: plain
-  hostname: ${SMTP_HOST}
-  port: ${SMTP_PORT}
 ${SECRETS_MAS_SECRETS}
 passwords:
   enabled: true
@@ -78,13 +72,10 @@ policy:
   register_entrypoint: register/violation
   authorization_grant_entrypoint: authorization_grant/violation
   password_entrypoint: password/violation
-  email_entrypoint: email/violation
   data:
     client_registration:
       allow_insecure_uris: true # allow non-SSL and localhost URIs
       allow_missing_contacts: true # EW doesn't have contacts at this time
-    admin_users:
-        - admin
 
 account:
   password_registration_enabled: false

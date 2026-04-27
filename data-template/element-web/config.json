@@ -3,9 +3,6 @@
         "m.homeserver": {
             "base_url": "https://${HOMESERVER_FQDN}",
             "server_name": "${DOMAIN}"
-        },
-        "m.identity_server": {
-            "base_url": "${IDENTITY_SERVER_URL}"
         }
     },
     "disable_custom_urls": false,
