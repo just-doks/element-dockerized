@@ -1,3 +1,3 @@
 {
-    "m.server": "${HOMESERVER_FQDN}:443"
+    "m.server": "{{ getenv "HOMESERVER_FQDN" }}:443"
 }

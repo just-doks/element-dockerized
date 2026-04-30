@@ -1,10 +1,10 @@
 {
     "m.homeserver": {
-        "base_url": "https://${HOMESERVER_FQDN}"
+        "base_url": "https://{{ getenv "HOMESERVER_FQDN" }}"
     },
     "org.matrix.msc2965.authentication": {
-        "issuer": "https://${DOMAIN}/",
-        "account": "https://${MAS_FQDN}/account"
+        "issuer": "https://{{ getenv "DOMAIN" }}/",
+        "account": "https://{{ getenv "MAS_FQDN" }}/account"
     },
     "io.element.e2ee": {
         "default":false,
