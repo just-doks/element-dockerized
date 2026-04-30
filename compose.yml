@@ -37,7 +37,11 @@ services:
 
   generate-mas-secrets:
     restart: "no"
-    build: containers/mas-init
+    build: 
+      context: containers/mas-init
+      args:
+        MAS_VERSION: ${MAS_VERSION}
+        ALPINE_VERSION: ${ALPINE_VERSION}
     user: $USER_ID:$GROUP_ID
     volumes:
       - ${VOLUME_PATH}/data/mas:/data:rw
@@ -45,7 +49,11 @@ services:
     entrypoint: "/entrypoint.sh"
   # dependency for templating /data-template into /data (having extracted any secrets from any default generated configs)
   init:
-    build: containers/init
+    build: 
+      context: containers/init
+      args:
+        MAS_VERSION: ${MAS_VERSION}
+        ALPINE_VERSION: ${ALPINE_VERSION}
     user: $USER_ID:$GROUP_ID
     restart: "no"
     volumes:
@@ -91,7 +99,10 @@ services:
         condition: service_completed_successfully
 
   synapse:
-    build: containers/synapse
+    build: 
+      context: containers/synapse
+      args:
+        SYNAPSE_VERSION: ${SYNAPSE_VERSION}
     user: $USER_ID:$GROUP_ID
     restart: unless-stopped
     volumes:

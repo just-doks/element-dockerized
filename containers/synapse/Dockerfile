@@ -1,4 +1,5 @@
-FROM matrixdotorg/synapse:1.151.0
+ARG SYNAPSE_VERSION=latest
+FROM matrixdotorg/synapse:${SYNAPSE_VERSION}
 
 # Copy module from build context
 COPY ./modules/matrix_encryption_disabler /opt/matrix_encryption_disabler

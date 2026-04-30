@@ -1,6 +1,8 @@
-FROM ghcr.io/element-hq/matrix-authentication-service AS mas
+ARG MAS_VERSION=latest
+FROM ghcr.io/element-hq/matrix-authentication-service:${MAS_VERSION} AS mas
 
-FROM alpine:3.23.4
+ARG ALPINE_VERSION=latest
+FROM alpine:${APLINE_VERSION}
 
 COPY --from=mas /usr/local/bin/mas-cli /usr/local/bin/mas-cli
 

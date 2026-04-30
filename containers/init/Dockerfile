@@ -1,4 +1,5 @@
-FROM alpine:latest
+ARG ALPINE_VERSION=latest
+FROM alpine:${ALPINE_VERSION}
 
 # TODO: check this doesn't reinstall yq on every launch and use a builder if necessary
 # RUN apk update && apk add yq bash envsubst
