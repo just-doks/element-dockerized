@@ -19,12 +19,12 @@ services:
 
   # dependencies for optionally generating default configs + secrets
   generate-synapse-secrets:
-    image: ghcr.io/element-hq/synapse:latest
+    image: ghcr.io/element-hq/synapse:${SYNAPSE_VERSION}
     user: $USER_ID:$GROUP_ID
     restart: "no"
     volumes:
       - ${VOLUME_PATH}/data/synapse:/data:rw
-      - ${VOLUME_PATH}/init/generate-synapse-secrets.sh:/entrypoint.sh
+      - ${VOLUME_PATH}/scripts/generate-synapse-secrets.sh:/entrypoint.sh
     env_file: .env
     environment:
       SYNAPSE_CONFIG_DIR: /data
@@ -35,14 +35,12 @@ services:
 
   generate-mas-secrets:
     restart: "no"
-    image: ghcr.io/element-hq/matrix-authentication-service:latest
+    build: containers/mas-init
     user: $USER_ID:$GROUP_ID
     volumes:
       - ${VOLUME_PATH}/data/mas:/data:rw
-    # FIXME: stop this regenerating a spurious default config every time
-    # We can't do the same approach as synapse (unless use a debug image of MAS) as MAS is distroless and has no bash.
-    command: "config generate -o /data/config.yaml.default"
-
+      - ${VOLUME_PATH}/scripts/generate-mas-secrets.sh:/entrypoint.sh
+    entrypoint: "/entrypoint.sh"
   # dependency for templating /data-template into /data (having extracted any secrets from any default generated configs)
   init:
     build: containers/init
@@ -52,7 +50,7 @@ services:
       - ${VOLUME_PATH}/secrets:/secrets
       - ${VOLUME_PATH}/data:/data
       - ${VOLUME_PATH}/data-template:/data-template
-      - ${VOLUME_PATH}/init/init.sh:/init.sh
+      - ${VOLUME_PATH}/scripts/init.sh:/init.sh
     command: "/init.sh"
     env_file: .env
     depends_on:
@@ -62,7 +60,7 @@ services:
         condition: service_completed_successfully
 
   nginx:
-    image: nginx:latest
+    image: nginx:${NGINX_VERSION}
     restart: unless-stopped
     #ports:
     #  - "80:80"
@@ -112,12 +110,11 @@ services:
         condition: service_completed_successfully
 
   synapse:
-    image: ghcr.io/element-hq/synapse:latest
+    build: containers/synapse
     user: $USER_ID:$GROUP_ID
     restart: unless-stopped
     volumes:
       - ${VOLUME_PATH}/data/synapse:/data:rw
-      - ${VOLUME_PATH}/data/ssl/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
     healthcheck:
       test: ["CMD-SHELL", "curl -fSs http://localhost:8008/health || exit 1"]
       start_period: "5s"
@@ -138,7 +135,7 @@ services:
         condition: service_completed_successfully
 
   mas:
-    image: ghcr.io/element-hq/matrix-authentication-service:latest
+    image: ghcr.io/element-hq/matrix-authentication-service:${MAS_VERSION}
     restart: unless-stopped
     # ports:
     #   - 8083:8080
@@ -156,7 +153,7 @@ services:
         condition: service_completed_successfully
 
   element-web:
-    image: vectorim/element-web:latest
+    image: vectorim/element-web:${WEB_VERSION}
     restart: unless-stopped
     # ports:
     #   - 8080:80
@@ -175,8 +172,8 @@ services:
 
   # Element Admin - Web UI for managing users/rooms via MAS
   element-admin:
-    image: oci.element.io/element-admin:latest
-    container_name: matrix-element-admin
+    build: containers/element-admin
+    # container_name: matrix-element-admin
     restart: unless-stopped
     environment:
       SERVER_NAME: $DOMAIN

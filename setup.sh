@@ -20,14 +20,10 @@ if [[ ! -e .env  ]]; then
 
     sed -ri.orig "s/^USER_ID=/USER_ID=$(id -u)/" .env
     sed -ri.orig "s/^GROUP_ID=/GROUP_ID=$(id -g)/" .env
-
-    read -p "Enter base domain name (e.g. example.com): " DOMAIN
-    sed -ri.orig "s/example.com/$DOMAIN/" .env
-
 else
     echo ".env already exists; move it out of the way first to re-setup"
 fi
 
 if ! [ -z "$success" ]; then
-    echo ".env and SSL configured; you can now docker compose up"
+    echo "Configure '.env' file. Then, run: docker compose up"
 fi

@@ -1,0 +1,6 @@
+[submodule "containers/synapse/modules/matrix_encryption_disabler"]
+	path = containers/synapse/modules/matrix_encryption_disabler
+	url = https://github.com/digitalentity/matrix_encryption_disabler.git
+[submodule "containers/element-admin"]
+	path = containers/element-admin
+	url = https://github.com/just-doks/element-admin.git

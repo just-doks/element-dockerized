@@ -1,8 +1,6 @@
-#!/usr/bin/ash
+#!/usr/bin/bash
 
 # a replacement entrypoint script for the MAS docker image which generates default config & secrets if needed.
-# N.B. NOT USED CURRENTLY AS THE MAS IMAGE HAS NO SHELL
-
 
 if [[ -f /data/config.yaml ]]
 then
