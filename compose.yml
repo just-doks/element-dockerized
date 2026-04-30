@@ -42,6 +42,7 @@ services:
       args:
         MAS_VERSION: ${MAS_VERSION}
         ALPINE_VERSION: ${ALPINE_VERSION}
+    env_file: .env
     user: $USER_ID:$GROUP_ID
     volumes:
       - ${VOLUME_PATH}/data/mas:/data:rw
