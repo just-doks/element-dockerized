@@ -21,6 +21,12 @@ Clone repo:
 git clone --recurse-submodules <repo-url>
 ```
 
+Clone specific branch:
+
+```sh
+git clone --branch <branch-name> --single-branch <repo-url>
+```
+
 ## To run
 
  1. Install [Docker Compose](https://docs.docker.com/compose/install/).
