@@ -13,6 +13,14 @@ It's featuring:
 Reverse proxy to resolve TLS in front of it is required. Simply forward it to nginx port 80.
 PostgreSQL must be setup separately, before deploying this project.
 
+## To install
+
+Clone repo:
+
+```sh
+git clone --recurse-submodules <repo-url>
+```
+
 ## To run
 
  1. Install [Docker Compose](https://docs.docker.com/compose/install/).
