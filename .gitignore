@@ -5,3 +5,5 @@
 .env.orig
 data
 secrets
+postgres/secrets
+postgres/data

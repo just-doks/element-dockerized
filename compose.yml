@@ -1,7 +1,7 @@
 # FIXME: define a frontend & backend network, and only expose backend services to the frontend (nginx)
 
 networks:
-  matrix-network:
+  matrix-net:
     internal: true
   pg-net:
     external: true
@@ -9,10 +9,12 @@ networks:
     external: true
 
 secrets:
-  postgres_password:
-    file: secrets/postgres/postgres_password
+  pg_synapse_password:
+    file: /opt/secrets/postgres/synapse_password
+  pg_mas_password:
+    file: /opt/secrets/postgres/mas_password
   synapse_signing_key:
-    file: secrets/synapse/signing.key
+    file: /opt/secrets/synapse/signing.key
 
 services:
   # XXX: consider factor out secret generation from the compose.yml
@@ -47,11 +49,15 @@ services:
     user: $USER_ID:$GROUP_ID
     restart: "no"
     volumes:
-      - ${VOLUME_PATH}/secrets:/secrets
+      - /opt/secrets/mas:/secrets/mas:rw
+      - /opt/secrets/synapse:/secrets/synapse:rw
       - ${VOLUME_PATH}/data:/data
       - ${VOLUME_PATH}/data-template:/data-template
       - ${VOLUME_PATH}/scripts/init.sh:/init.sh
     command: "/init.sh"
+    secrets:
+      - pg_synapse_password
+      - pg_mas_password
     env_file: .env
     depends_on:
       generate-synapse-secrets:
@@ -73,38 +79,13 @@ services:
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks:
       caddy-net:
-      matrix-network:
+      matrix-net:
         aliases: # so our containers can resolve the LB
           - $DOMAIN
           - $HOMESERVER_FQDN
           - $ELEMENT_WEB_FQDN
           - $ELEMENT_CALL_FQDN
           - $MAS_FQDN
-    depends_on:
-      init:
-        condition: service_completed_successfully
-
-  postgres:
-    image: postgres:latest
-    restart: unless-stopped
-    volumes:
-      - ${VOLUME_PATH}/data/postgres:/var/lib/postgresql/data:rw
-      - ${VOLUME_PATH}/scripts/create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
-    networks:
-      - matrix-network
-    environment:
-      POSTGRES_MULTIPLE_DATABASES: synapse,mas
-      POSTGRES_USER: matrix # FIXME: use different username+passwords for synapse & MAS DBs.
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
-      POSTGRES_INITDB_ARGS: --encoding=UTF8 --locale=C
-      PGDATA: /var/lib/postgresql/data/data # otherwise it clashes with .gitkeep in the parent dir
-    secrets:
-      - postgres_password
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U matrix"]
-      start_period: "1s"
-      interval: "1s"
-      timeout: "5s"
     depends_on:
       init:
         condition: service_completed_successfully
@@ -123,7 +104,7 @@ services:
     # ports:
     #   - 8008:8008
     networks:
-      - matrix-network
+      - matrix-net
       - pg-net
     environment:
       SYNAPSE_CONFIG_DIR: /data
@@ -131,6 +112,8 @@ services:
     secrets:
       - synapse_signing_key
     depends_on:
+      postgres:
+        condition: service_healthy
       init:
         condition: service_completed_successfully
 
@@ -142,7 +125,7 @@ services:
     volumes:
       - ${VOLUME_PATH}/data/mas:/data:rw
     networks:
-      - matrix-network
+      - matrix-net
       - pg-net
     # FIXME: do we also need to sync the db?
     command: "server --config=/data/config.yaml"
@@ -163,7 +146,7 @@ services:
       interval: "15s"
       timeout: "5s"
     networks:
-      - matrix-network
+      - matrix-net
     volumes:
       - ${VOLUME_PATH}/data/element-web/config.json:/app/config.json
     depends_on:
@@ -178,7 +161,7 @@ services:
     environment:
       SERVER_NAME: $DOMAIN
     networks:
-      - matrix-network
+      - matrix-net
     depends_on:
       - synapse
       - mas

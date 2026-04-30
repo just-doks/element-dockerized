@@ -36,12 +36,6 @@ then
 	head -c16 /dev/urandom | base64 | tr -d '=' > /secrets/mas/client.secret
 fi
 
-if [[ ! -s /secrets/postgres/postgres_password ]]
-then
-	mkdir -p /secrets/postgres
-	head -c16 /dev/urandom | base64 | tr -d '=' > /secrets/postgres/postgres_password
-fi
-
 # TODO: compare the default generated config with our templates to see if our templates are stale
 # we'd have to strip out the secrets from the generated configs to be able to diff them sensibly
 
@@ -75,7 +69,7 @@ export DOLLAR='$' # evil hack to escape dollars in config files
 	export SECRETS_SYNAPSE_FORM_SECRET=$(</secrets/synapse/form_secret)
 	export SECRETS_MAS_MATRIX_SECRET=$(</secrets/mas/matrix.secret)
 	export SECRETS_MAS_CLIENT_SECRET=$(</secrets/mas/client.secret)
-	export SECRETS_POSTGRES_PASSWORD=$(</secrets/postgres/postgres_password)
+	export SECRETS_PG_SYNAPSE_PASSWORD=$(</run/secrets/pg_synapse_password)
 	template "/data-template/synapse"
 )
 
@@ -83,7 +77,7 @@ export DOLLAR='$' # evil hack to escape dollars in config files
 	export SECRETS_MAS_SECRETS=$(</secrets/mas/secrets)
 	export SECRETS_MAS_MATRIX_SECRET=$(</secrets/mas/matrix.secret)
 	export SECRETS_MAS_CLIENT_SECRET=$(</secrets/mas/client.secret)
-	export SECRETS_POSTGRES_PASSWORD=$(</secrets/postgres/postgres_password)
+	export SECRETS_PG_MAS_PASSWORD=$(</run/secrets/pg_mas_password)
 	template "/data-template/mas"
 )
 

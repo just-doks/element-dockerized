@@ -3,33 +3,57 @@
         "m.homeserver": {
             "base_url": "https://${HOMESERVER_FQDN}",
             "server_name": "${DOMAIN}"
+        },
+        "io.element.e2ee": {
+            "default": false,
+            "force_disable": true
         }
     },
-    "disable_custom_urls": false,
-    "disable_guests": false,
+    "embedded_pages": {
+        "login_for_welcome": true
+    },
+    "disable_custom_urls": true,
+    "disable_guests": true,
     "disable_login_language_selector": false,
-    "disable_3pid_login": false,
+    "disable_3pid_login": true,
     "force_verification": false,
     "brand": "Element",
-    "default_widget_container_height": 280,
+    "piwik": false,
+    "integrations_ui_url": null,
+    "integrations_rest_url": null,
+    "integrations_widgets_urls": null,
     "default_country_code": "${COUNTRY}",
     "show_labs_settings": false,
     "features": {
-        "feature_video_rooms": true,
-        "feature_group_calls": true,
-        "feature_element_call_video_rooms": true,
+        "feature_pinning": true,
+        "feature_jump_to_date": true,
+        "feature_new_room_decoration_ui": true,
         "feature_oidc_native_flow": true
     },
-    "default_federate": true,
+    "default_federate": false,
     "default_theme": "light",
     "room_directory": {
         "servers": ["${DOMAIN}"]
     },
+    "permalink_prefix": "https://${ELEMENT_WEB_FQDN}",
+    "enable_presence_by_hs_url": {
+        "https://${HOMESERVER_FQDN}": true
+    },
     "setting_defaults": {
-        "breadcrumbs": true
+        "breadcrumbs": true,
+        "UIFeature.voip": false,
+        "UIFeature.ShareSocial": false,
+        "UIFeature.registration": false,
+        "UIFeature.LocationSharing": false,
+        "UIFeature.Widgets": false,
+        "UIFeature.ThirdPartyID": false,
+        "UIFeature.IdentityServer": false,
+        "UIFeature.deactivate": false,
+        "feature_group_calls": false
     },
-    "element_call": {
-        "url": "https://${ELEMENT_CALL_FQDN}"
+    "sso_redirect_options": {
+        "immediate": false
     },
-    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
+    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
+    "mobile_guide_app_variant": "element"
 }

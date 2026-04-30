@@ -1,4 +1,4 @@
-#${CONFIG_HEADER}
+${CONFIG_HEADER}
 
 http:
   listeners:
@@ -33,8 +33,8 @@ http:
 database:
   host: postgres
   database: mas
-  username: matrix
-  password: ${SECRETS_POSTGRES_PASSWORD}
+  username: mas_user
+  password: ${SECRETS_PG_MAS_PASSWORD}
   max_connections: 10
   min_connections: 0
   connect_timeout: 30
@@ -78,7 +78,10 @@ policy:
       allow_missing_contacts: true # EW doesn't have contacts at this time
 
 account:
+  displayname_change_allowed: false
   password_registration_enabled: false
+  password_registration_email_required: false
+  password_change_allowed: false
 
 branding:
   service_name: null

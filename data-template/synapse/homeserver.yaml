@@ -26,7 +26,7 @@ database:
     name: psycopg2
     args:
         user: synapse_user
-        password: '${SECRETS_POSTGRES_PASSWORD}'
+        password: '${SECRETS_PG_SYNAPSE_PASSWORD}'
         host: postgres
         database: synapse
 

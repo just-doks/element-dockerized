@@ -6,13 +6,11 @@ set -e
 # set up data & secrets dir with the right ownerships in the default location
 # to stop docker autocreating them with random owners.
 # originally these were checked into the git repo, but that's pretty ugly, so doing it here instead.
-mkdir -p data/{element-{web,call},livekit,mas,nginx/{ssl,www,conf.d},postgres,synapse}
-mkdir -p secrets/{livekit,postgres,synapse}
+mkdir -p data/{element-web,mas,nginx/{www,conf.d},synapse}
+mkdir -p /opt/secrets/{synapse,mas}
 
 # create blank secrets to avoid docker creating empty directories in the host
-touch secrets/livekit/livekit_{api,secret}_key \
-      secrets/postgres/postgres_password \
-      secrets/synapse/signing.key
+touch /opt/secrets/synapse/signing.key
 
 # grab an env if we don't have one already
 if [[ ! -e .env  ]]; then
