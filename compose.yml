@@ -123,8 +123,8 @@ services:
     secrets:
       - synapse_signing_key
     depends_on:
-      postgres:
-        condition: service_healthy
+      #postgres:
+      #  condition: service_healthy
       init:
         condition: service_completed_successfully
 
@@ -141,8 +141,8 @@ services:
     # FIXME: do we also need to sync the db?
     command: "server --config=/data/config.yaml"
     depends_on:
-      postgres:
-        condition: service_healthy
+      #postgres:
+      #  condition: service_healthy
       init:
         condition: service_completed_successfully
 
