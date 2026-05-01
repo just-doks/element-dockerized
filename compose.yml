@@ -10,9 +10,9 @@ networks:
 
 secrets:
   pg_synapse_password:
-    file: /opt/secrets/postgres/synapse_password
+    file: /opt/secrets/postgresql/synapse_user
   pg_mas_password:
-    file: /opt/secrets/postgres/mas_password
+    file: /opt/secrets/postgresql/mas_user
   synapse_signing_key:
     file: /opt/secrets/synapse/signing.key
 
@@ -54,7 +54,6 @@ services:
       context: containers/init
       args:
         MAS_VERSION: ${MAS_VERSION}
-        ALPINE_VERSION: ${ALPINE_VERSION}
     image: matrix-init:local
     user: $USER_ID:$GROUP_ID
     restart: "no"
