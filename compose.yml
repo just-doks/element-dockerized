@@ -46,7 +46,7 @@ services:
     user: $USER_ID:$GROUP_ID
     volumes:
       - ${VOLUME_PATH}/data/mas:/data:rw
-      - ${VOLUME_PATH}/secrets/generate-mas-secrets.sh:/usr/local/bin/start.sh
+      - ${VOLUME_PATH}/scripts/generate-mas-secrets.sh:/usr/local/bin/start.sh
     command: "bash /usr/local/bin/start.sh"
   # dependency for templating /data-template into /data (having extracted any secrets from any default generated configs)
   init:
