@@ -1,12 +1,11 @@
-ARG ALPINE_VERSION=latest
-FROM alpine:${ALPINE_VERSION}
+FROM debian:trixie-slim
 
 ARG MAS_VERSION=v1.16.0
 
-RUN apk add --no-cache bash curl tar \
-    && mkdir -p /usr/local/bin  \
-    && curl -fSL "https://github.com/element-hq/matrix-authentication-service/releases/download/${MAS_VERSION}/mas-cli-x86_64-linux.tar.gz" -o /tmp/mas-cli.tar.gz \
-    && tar -xzf /tmp/mas-cli.tar.gz -C /tmp \
-    && mv /tmp/mas-cli /usr/local/bin/mas-cli \
-    && chmod +x /usr/local/bin/mas-cli
+RUN apt update \
+    && apt install -y --no-install-recommends ca-certificates curl tar \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fSL "https://github.com/element-hq/matrix-authentication-service/releases/download/${MAS_VERSION}/mas-cli-x86_64-linux.tar.gz" \
+    | tar -xz -C /usr/local/bin/
 

@@ -41,13 +41,13 @@ services:
       context: containers/mas-init
       args:
         MAS_VERSION: ${MAS_VERSION}
-        ALPINE_VERSION: ${ALPINE_VERSION}
+    image: mas-init:${MAS_VERSION}
     env_file: .env
     user: $USER_ID:$GROUP_ID
     volumes:
       - ${VOLUME_PATH}/data/mas:/data:rw
-      - ${VOLUME_PATH}/scripts/generate-mas-secrets.sh:/usr/local/bin/start.sh
-    command: "bash /usr/local/bin/start.sh"
+      - ${VOLUME_PATH}/scripts/generate-mas-secrets.sh:/entrypoint.sh
+    entrypoint: "/entrypoint.sh"
   # dependency for templating /data-template into /data (having extracted any secrets from any default generated configs)
   init:
     build: 
@@ -168,6 +168,7 @@ services:
   # Element Admin - Web UI for managing users/rooms via MAS
   element-admin:
     build: containers/element-admin
+    image: element-admin-custom:local
     # container_name: matrix-element-admin
     restart: unless-stopped
     environment:

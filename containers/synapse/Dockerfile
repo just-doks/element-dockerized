@@ -1,4 +1,4 @@
-ARG SYNAPSE_VERSION=latest
+ARG SYNAPSE_VERSION=v1.152.0
 FROM matrixdotorg/synapse:${SYNAPSE_VERSION}
 
 # Copy module from build context
