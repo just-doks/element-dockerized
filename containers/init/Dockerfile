@@ -8,5 +8,5 @@ RUN apt update \
     && apt install -y --no-install-recommends ca-certificates curl yq gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fSL "https://github.com/hairyhenderson/gomplate/releases/${GOMPLATE_VERSION}/download/gomplate_linux-amd64" -o /usr/local/bin/gomplate \
+RUN curl -fSL "https://github.com/hairyhenderson/gomplate/releases/download/${GOMPLATE_VERSION}/gomplate_linux-amd64" -o /usr/local/bin/gomplate \
    && chmod +x /usr/local/bin/gomplate
