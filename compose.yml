@@ -41,7 +41,7 @@ services:
       context: containers/mas-init
       args:
         MAS_VERSION: ${MAS_VERSION}
-    image: mas-init:${MAS_VERSION}
+    image: mas-init:local
     env_file: .env
     user: $USER_ID:$GROUP_ID
     volumes:
@@ -55,6 +55,7 @@ services:
       args:
         MAS_VERSION: ${MAS_VERSION}
         ALPINE_VERSION: ${ALPINE_VERSION}
+    image: matrix-init:local
     user: $USER_ID:$GROUP_ID
     restart: "no"
     volumes:
