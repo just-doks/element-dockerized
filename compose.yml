@@ -38,7 +38,7 @@ services:
   generate-mas-secrets:
     restart: "no"
     build: 
-      context: ./containers/mas-init
+      context: containers/mas-init
       args:
         MAS_VERSION: ${MAS_VERSION}
         ALPINE_VERSION: ${ALPINE_VERSION}
@@ -93,7 +93,7 @@ services:
           - $DOMAIN
           - $HOMESERVER_FQDN
           - $ELEMENT_WEB_FQDN
-          - $ELEMENT_CALL_FQDN
+          - $ELEMENT_ADMIN_FQDN
           - $MAS_FQDN
     depends_on:
       init:
