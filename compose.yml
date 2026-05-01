@@ -46,8 +46,8 @@ services:
     user: $USER_ID:$GROUP_ID
     volumes:
       - ${VOLUME_PATH}/data/mas:/data:rw
-      - ${VOLUME_PATH}/scripts/generate-mas-secrets.sh:/entrypoint.sh
-    entrypoint: "/entrypoint.sh"
+      - ${VOLUME_PATH}/scripts/generate-mas-secrets.sh:/start.sh
+    command: "/start.sh"
   # dependency for templating /data-template into /data (having extracted any secrets from any default generated configs)
   init:
     build: 
