@@ -5,7 +5,8 @@ ARG GOMPLATE_VERSION=v5.0.0
 # RUN apk update && apk add yq bash envsubst
 
 RUN apt update \
-    && apt install -y --no-install-recommends ca-certificates curl yq bash envsubst
+    && apt install -y --no-install-recommends ca-certificates curl yq bash envsubst \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fSL "https://github.com/hairyhenderson/gomplate/releases/${GOMPLATE_VERSION}/download/gomplate_linux-amd64" -o /usr/local/bin/gomplate \
    && chmod +x /usr/local/bin/gomplate
