@@ -8,7 +8,7 @@ then
 	exit 0
 fi
 
-
+ls /usr/local/bin
 
 echo "MAS config not found - generating default for secrets"
 exec mas-cli config generate -o /data/config.yaml.default
