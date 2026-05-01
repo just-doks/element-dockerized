@@ -25,5 +25,5 @@ else
 fi
 
 if ! [ -z "$success" ]; then
-    echo "Configure '.env' file. Then, run: docker compose up"
+    echo "Configure '.env' file. DON'T FORGET TO SETUP POSTGRES! Then, run: docker compose up"
 fi
