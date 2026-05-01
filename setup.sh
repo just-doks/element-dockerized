@@ -18,8 +18,10 @@ if [[ ! -e .env  ]]; then
 
     sed -ri.orig "s/^USER_ID=/USER_ID=$(id -u)/" .env
     sed -ri.orig "s/^GROUP_ID=/GROUP_ID=$(id -g)/" .env
+    success=true
 else
     echo ".env already exists; move it out of the way first to re-setup"
+    success=true
 fi
 
 if ! [ -z "$success" ]; then
